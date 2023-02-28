@@ -1,4 +1,3 @@
-# Codes from Lecture Slides (ECE 448/528)
+## Code for ECE 448/528 Lectures
 
-Codes from Lecture Slides (ECE 448/528 Spring 2023)
-Should work with VS Code of class VM. Should also work with other IDEs with gradle.
+Work with VS Code in the course VM. Should also work with any other IDE supporting Gradle/Java.
