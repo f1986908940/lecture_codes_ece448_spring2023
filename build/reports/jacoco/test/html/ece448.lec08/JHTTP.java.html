@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JHTTP.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lecture_codes_ece448_spring2023</a> &gt; <a href="index.source.html" class="el_package">ece448.lec08</a> &gt; <span class="el_source">JHTTP.java</span></div><h1>JHTTP.java</h1><pre class="source lang-java linenums">package ece448.lec08;
+
+/**
+ * Adopted from Java Network Programming 4th.
+ */
+
+import java.io.*;
+import java.net.*;
+import java.util.concurrent.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class JHTTP {
+
+<span class="nc" id="L16">	private static final Logger logger = LoggerFactory.getLogger(JHTTP.class);</span>
+	private static final int NUM_THREADS = 50;
+	private static final String INDEX_FILE = &quot;index.html&quot;;
+
+	private final File rootDirectory;
+	private final int port;
+
+<span class="nc" id="L23">	public JHTTP(File rootDirectory, int port) throws IOException {</span>
+
+<span class="nc bnc" id="L25" title="All 2 branches missed.">		if (!rootDirectory.isDirectory()) {</span>
+<span class="nc" id="L26">			throw new IOException(rootDirectory + &quot; does not exist as a directory&quot;);</span>
+		}
+<span class="nc" id="L28">		this.rootDirectory = rootDirectory;</span>
+<span class="nc" id="L29">		this.port = port;</span>
+<span class="nc" id="L30">	}</span>
+
+	public void start() throws IOException {
+<span class="nc" id="L33">		ExecutorService pool = Executors.newFixedThreadPool(NUM_THREADS);</span>
+<span class="nc" id="L34">		try (ServerSocket server = new ServerSocket(port)) {</span>
+<span class="nc" id="L35">			logger.info(&quot;Accepting connections on port {}&quot;, server.getLocalPort());</span>
+<span class="nc" id="L36">			logger.info(&quot;Document Root: {}&quot;, rootDirectory);</span>
+
+			while (true) {
+				try {
+<span class="nc" id="L40">					Socket request = server.accept();</span>
+<span class="nc" id="L41">					Runnable r = new RequestProcessor(rootDirectory, INDEX_FILE, request);</span>
+<span class="nc" id="L42">					pool.submit(r);</span>
+<span class="nc" id="L43">				} catch (IOException ex) {</span>
+<span class="nc" id="L44">					logger.warn(&quot;Error accepting connection&quot;, ex);</span>
+<span class="nc" id="L45">				}</span>
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+
+		// get the Document root
+		File docroot;
+		try {
+<span class="nc bnc" id="L55" title="All 2 branches missed.">			docroot = new File((args.length &lt; 1)? &quot;.&quot;: args[0]);</span>
+<span class="nc" id="L56">		} catch (ArrayIndexOutOfBoundsException ex) {</span>
+<span class="nc" id="L57">			System.out.println(&quot;Usage: java JHTTP docroot port&quot;);</span>
+<span class="nc" id="L58">			return;</span>
+<span class="nc" id="L59">		}</span>
+
+		// set the port to listen on
+		int port;
+		try {
+<span class="nc bnc" id="L64" title="All 2 branches missed.">			port = Integer.parseInt((args.length &lt; 2)? &quot;8080&quot;: args[1]);</span>
+<span class="nc bnc" id="L65" title="All 4 branches missed.">			if (port &lt; 0 || port &gt; 65535)</span>
+<span class="nc" id="L66">				port = 80;</span>
+<span class="nc" id="L67">		} catch (RuntimeException ex) {</span>
+<span class="nc" id="L68">			port = 80;</span>
+<span class="nc" id="L69">		}</span>
+
+		try {
+<span class="nc" id="L72">			JHTTP webserver = new JHTTP(docroot, port);</span>
+<span class="nc" id="L73">			webserver.start();</span>
+<span class="nc" id="L74">		} catch (IOException ex) {</span>
+<span class="nc" id="L75">			logger.error(&quot;Server could not start&quot;, ex);</span>
+<span class="nc" id="L76">		}</span>
+<span class="nc" id="L77">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

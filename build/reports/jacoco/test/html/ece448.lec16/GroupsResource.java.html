@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GroupsResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lecture_codes_ece448_spring2023</a> &gt; <a href="index.source.html" class="el_package">ece448.lec16</a> &gt; <span class="el_source">GroupsResource.java</span></div><h1>GroupsResource.java</h1><pre class="source lang-java linenums">package ece448.lec16;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class GroupsResource {
+
+	private final GroupsModel groups;
+
+<span class="nc" id="L23">	public GroupsResource(GroupsModel groups) {</span>
+<span class="nc" id="L24">		this.groups = groups;</span>
+<span class="nc" id="L25">	}</span>
+	
+	@GetMapping(&quot;/api/groups&quot;)
+	public Collection&lt;Object&gt; getGroups() throws Exception {
+<span class="nc" id="L29">		ArrayList&lt;Object&gt; ret = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">		for (String group: groups.getGroups()) {</span>
+<span class="nc" id="L31">			ret.add(makeGroup(group));</span>
+<span class="nc" id="L32">		}</span>
+<span class="nc" id="L33">		logger.info(&quot;Groups: {}&quot;, ret);</span>
+<span class="nc" id="L34">		return ret;</span>
+	}
+
+	@GetMapping(&quot;/api/groups/{group}&quot;)
+	public Object getGroup(
+		@PathVariable(&quot;group&quot;) String group,
+		@RequestParam(value = &quot;action&quot;, required = false) String action) {
+<span class="nc bnc" id="L41" title="All 2 branches missed.">		if (action == null) {</span>
+<span class="nc" id="L42">			Object ret = makeGroup(group);</span>
+<span class="nc" id="L43">			logger.info(&quot;Group {}: {}&quot;, group, ret);</span>
+<span class="nc" id="L44">			return ret;</span>
+		}
+
+		// modify code below to control plugs by publishing messages to MQTT broker
+<span class="nc" id="L48">		List&lt;String&gt; members = groups.getGroupMembers(group);</span>
+<span class="nc" id="L49">		logger.info(&quot;Group {}: action {}, {}&quot;, group, action, members);</span>
+<span class="nc" id="L50">		return null;</span>
+	}
+
+	@PostMapping(&quot;/api/groups/{group}&quot;)
+	public void createGroup(
+		@PathVariable(&quot;group&quot;) String group,
+		@RequestBody List&lt;String&gt; members) {
+<span class="nc" id="L57">		groups.setGroupMembers(group, members);</span>
+<span class="nc" id="L58">		logger.info(&quot;Group {}: created {}&quot;, group, members);</span>
+<span class="nc" id="L59">	}</span>
+
+	@DeleteMapping(&quot;/api/groups/{group}&quot;)
+	public void removeGroup(
+		@PathVariable(&quot;group&quot;) String group) {
+<span class="nc" id="L64">		groups.removeGroup(group);</span>
+<span class="nc" id="L65">		logger.info(&quot;Group {}: removed&quot;, group);</span>
+<span class="nc" id="L66">	}</span>
+
+	protected Object makeGroup(String group) {
+		// modify code below to include plug states
+<span class="nc" id="L70">		HashMap&lt;String, Object&gt; ret = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L71">		ret.put(&quot;name&quot;, group);</span>
+<span class="nc" id="L72">		ret.put(&quot;members&quot;, groups.getGroupMembers(group));</span>
+<span class="nc" id="L73">		return ret;</span>
+	}
+
+<span class="nc" id="L76">	private static final Logger logger = LoggerFactory.getLogger(GroupsResource.class);	</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

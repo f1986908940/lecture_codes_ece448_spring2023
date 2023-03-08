@@ -1,8 +1,48 @@
-ece448/lec05/ReverseString.java
- ece448.lec05.ReverseString
-ece448/lec03/HelloWorld.java
- ece448.lec03.HelloWorld
 ece448/lec06/ReverseProcessor.java
  ece448.lec06.ReverseProcessor
+ece448/lec14/InterfaceC.java
+ ece448.lec14.ComponentC
+ ece448.lec14.ComponentCX
+ ece448.lec14.FactoryC
+ ece448.lec14.InterfaceC
+ece448/lec12/Lambda.java
+ ece448.lec12.Function
+ ece448.lec12.Lambda
+ ece448.lec12.Lambda$Closure
+ ece448.lec12.Lambda$ClosureThis
+ ece448.lec12.Lambda$Simple
+ece448/lec03/HelloWorld.java
+ ece448.lec03.HelloWorld
+ece448/lec14/ComponentB.java
+ ece448.lec14.ComponentB
+ ece448.lec14.FactoryB
+ece448/lec16/GroupsResource.java
+ ece448.lec16.GroupsResource
+ece448/lec16/App.java
+ ece448.lec16.App
+ece448/lec12/JsonMapping.java
+ ece448.lec12.JsonMapping
+ ece448.lec12.JsonMapping$1
+ece448/lec12/SimConfig.java
+ ece448.lec12.SimConfig
+ece448/lec14/ComponentD.java
+ ece448.lec14.ComponentD
+ ece448.lec14.FactoryD
+ece448/lec14/Main.java
+ ece448.lec14.Main
+ece448/lec05/ReverseString.java
+ ece448.lec05.ReverseString
+ece448/lec16/Main.java
+ ece448.lec16.Main
+ece448/lec14/ComponentA.java
+ ece448.lec14.ComponentA
 ece448/lec06/ReverseServer.java
  ece448.lec06.ReverseServer
+ece448/lec08/RequestProcessor.java
+ ece448.lec08.RequestProcessor
+ece448/lec08/JHTTP.java
+ ece448.lec08.JHTTP
+ece448/lec14/App.java
+ ece448.lec14.App
+ece448/lec16/GroupsModel.java
+ ece448.lec16.GroupsModel

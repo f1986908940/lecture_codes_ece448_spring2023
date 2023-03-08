@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InterfaceC.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">lecture_codes_ece448_spring2023</a> &gt; <a href="index.source.html" class="el_package">ece448.lec14</a> &gt; <span class="el_source">InterfaceC.java</span></div><h1>InterfaceC.java</h1><pre class="source lang-java linenums">package ece448.lec14;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+public interface InterfaceC {
+	public String getName();
+}
+
+class ComponentC implements InterfaceC {
+	private final String prefix;
+	
+	@Autowired
+	private ComponentA a;
+
+	private ComponentD d;
+
+<span class="nc" id="L26">	public ComponentC(ComponentB b, String prefix) {</span>
+<span class="nc" id="L27">		logger.info(&quot;{}/?/?: created with {}.&quot;, prefix, b.getName());</span>
+<span class="nc" id="L28">		this.prefix = prefix;</span>
+<span class="nc" id="L29">	}</span>
+
+	@Override
+	public String getName() {
+<span class="nc bnc" id="L33" title="All 2 branches missed.">		String aName = (a == null)? &quot;?&quot;: a.getName();</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">		String dName = (d == null)? &quot;?&quot;: d.getName();</span>
+<span class="nc" id="L35">		return prefix+&quot;/&quot;+aName+&quot;/&quot;+dName;</span>
+	}
+
+	@Autowired
+	public void onContext(ApplicationContext ctx) {
+<span class="nc" id="L40">		d = (ComponentD)ctx.getBean(&quot;beanD&quot;+prefix.substring(6));</span>
+<span class="nc" id="L41">	}</span>
+
+<span class="nc" id="L43">	private static final Logger logger = LoggerFactory.getLogger(ComponentC.class);</span>
+}
+
+class ComponentCX implements InterfaceC {
+	private final String name;
+	
+<span class="nc" id="L49">	public ComponentCX(String name) {</span>
+<span class="nc" id="L50">		logger.info(&quot;{}: created.&quot;, name);</span>
+<span class="nc" id="L51">		this.name = name;</span>
+<span class="nc" id="L52">	}</span>
+
+	@Override
+	public String getName() {
+<span class="nc" id="L56">		return name;</span>
+	}
+
+<span class="nc" id="L59">	private static final Logger logger = LoggerFactory.getLogger(ComponentCX.class);</span>
+}
+
+@Configuration
+<span class="nc" id="L63">class FactoryC {</span>
+	@Bean
+	public InterfaceC beanC1(@Qualifier(&quot;beanB1&quot;) ComponentB b1) {
+<span class="nc" id="L66">		return new ComponentC(b1, &quot;Bean-C1&quot;);</span>
+	}
+
+	@Bean
+	public ComponentC beanC2(@Qualifier(&quot;beanB2&quot;) ComponentB b2) {
+<span class="nc" id="L71">		return new ComponentC(b2, &quot;Bean-C2&quot;);</span>
+	}
+
+	@Bean
+	public ComponentCX beanC3() {
+<span class="nc" id="L76">		return new ComponentCX(&quot;Bean-C3&quot;);</span>
+	}
+
+	@Bean
+	public List&lt;InterfaceC&gt; listC(@Qualifier(&quot;beanC1&quot;) InterfaceC c1,
+		@Qualifier(&quot;beanC2&quot;) InterfaceC c2, ComponentCX c3) {
+<span class="nc" id="L82">		logger.info(&quot;List-C: [{}, {}, {}]&quot;, c1.getName(), c2.getName(), c3.getName());</span>
+<span class="nc" id="L83">		return Arrays.asList(c1, c2, c3);</span>
+	}
+
+<span class="nc" id="L86">	private static final Logger logger = LoggerFactory.getLogger(FactoryC.class);</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
